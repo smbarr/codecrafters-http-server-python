@@ -51,7 +51,8 @@ def handle_client(conn):
             return resp
 
         resp = getResp()
-        conn.sendall(resp.encode('utf-8'))
+        conn.send(resp.encode('utf-8'))
+        conn.close()
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
