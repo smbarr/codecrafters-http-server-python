@@ -12,9 +12,13 @@ def main():
     conn, addr = server_socket.accept() # wait for client
 
     with conn:
-        data = conn.recv(144)
-        print(data)
-        conn.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
+        _bytes = conn.recv(144)
+        data = _bytes.decode("utf-8")
+        path = data.split("\n")[0].split()[1]
+
+        resp_code = "200 OK" if path == "/" else "404 Not Found"
+        resp = f"HTTP/1.1 {resp_code}\r\n\r\n"
+        conn.sendall(resp.encode('utf-8'))
 
 
 if __name__ == "__main__":
