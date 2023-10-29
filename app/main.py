@@ -65,6 +65,8 @@ def handle_client(conn, directory):
                             return resp
                         elif method == "POST":
                             body = dataLines[-1]
+                            print(body)
+                            print(dataLines)
                             with open(fileName, 'w') as f:
                                 f.write(body)
                             resp = "\r\n".join([
