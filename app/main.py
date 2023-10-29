@@ -59,7 +59,8 @@ def handle_client(conn):
                             resp = "\r\n".join([
                                 f"HTTP/1.1 404 Not Found",
                                 ""
-                                "Content-Type: application/octet-stream"
+                                "Content-Type: text/plain"
+                                "", ""
                             ])
                             print(resp)
                         return resp
