@@ -1,22 +1,11 @@
 # Uncomment this to pass the first stage
 import socket
+import threading
 
-
-def main():
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
-    print("Logs from your program will appear here!")
-
-    # Uncomment this to pass the first stage
-    #
-    server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
-    conn, addr = server_socket.accept() # wait for client
-
-    with conn:
+def handle_client(conn):
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
-        # print(data)
         path = data.split("\n")[0].split()[1]
-        print(path)
 
         def getResp():
             if "/" in path:
@@ -41,7 +30,6 @@ def main():
                         if "User-Agent" in line:
                             user_agent = line.split(":")[1].strip()
                     contentLength = len(user_agent)
-                    print(user_agent)
                     resp = "\r\n".join([
                         f"HTTP/1.1 200 OK",
                         ""
@@ -64,6 +52,19 @@ def main():
 
         resp = getResp()
         conn.sendall(resp.encode('utf-8'))
+
+def main():
+    # You can use print statements as follows for debugging, they'll be visible when running tests.
+    print("Logs from your program will appear here!")
+
+    # Uncomment this to pass the first stage
+    #
+    server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
+
+    while True:
+        conn, addr = server_socket.accept() # wait for client
+        client_thread = threading.Thread(traget=handle_client, args=(conn,))
+        client_thread.start()
 
 
 if __name__ == "__main__":
