@@ -14,6 +14,7 @@ def main():
     with conn:
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
+        print(data)
         path = data.split("\n")[0].split()[1]
 
         def getResp():
