@@ -33,7 +33,11 @@ def main():
                         ])
                         return resp
                 if path.split("/")[1].strip() == "user-agent":
-                    user_agent = data.split("\n")[3].split(":")[1]
+                    dataLines = data.split("\n")
+                    user_agent = None
+                    for n in dataLines
+                        if "User-Agent" in dataLines[n]:
+                            user_agent = dataLines[n].split(":")[1]
                     contentLength = len(user_agent)
                     resp = "\r\n".join([
                         f"HTTP/1.1 200 OK",
