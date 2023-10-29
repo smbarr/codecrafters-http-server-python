@@ -41,7 +41,7 @@ def handle_client(conn):
                         ])
                         return resp
                     elif head == "files":
-                        filePath = "/".join(path.split("/")[:2])
+                        filePath = "/".join(path.split("/")[2:])
                         print(filePath)
                         if os.path.isfile(filePath):
                             with open(filePath) as f:
