@@ -35,6 +35,7 @@ def main():
                         ])
                         return resp
                 if path.split("/")[1].strip() == "user-agent":
+                    print("Here")
                     dataLines = data.split("\n")
                     user_agent = None
                     for n in dataLines:
