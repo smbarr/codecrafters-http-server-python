@@ -63,7 +63,7 @@ def main():
 
     while True:
         conn, addr = server_socket.accept() # wait for client
-        client_thread = threading.Thread(traget=handle_client, args=(conn,))
+        client_thread = threading.Thread(target=handle_client, args=(conn,))
         client_thread.start()
 
 
