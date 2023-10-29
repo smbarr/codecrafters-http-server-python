@@ -1,11 +1,13 @@
 # Uncomment this to pass the first stage
+import os
 import socket
 import threading
 
 def handle_client(conn):
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
-        path = data.split("\n")[0].split()[1]
+        dataLines = data.split("\n")
+        path = dataLines[0].split()[1]
 
         def getResp():
             if "/" in path:
@@ -23,22 +25,42 @@ def handle_client(conn):
                             rngStr
                         ])
                         return resp
-                if path.split("/")[1].strip() == "user-agent":
-                    dataLines = data.split("\n")
-                    user_agent = None
-                    for line in dataLines:
-                        if "User-Agent" in line:
-                            user_agent = line.split(":")[1].strip()
-                    contentLength = len(user_agent)
-                    resp = "\r\n".join([
-                        f"HTTP/1.1 200 OK",
-                        ""
-                        "Content-Type: text/plain",
-                        f"Content-Length: {contentLength}",
-                        "",
-                        user_agent
-                    ])
-                    return resp
+                    elif head == "user-agent":
+                        user_agent = None
+                        for line in dataLines:
+                            if "User-Agent" in line:
+                                user_agent = line.split(":")[1].strip()
+                        contentLength = len(user_agent)
+                        resp = "\r\n".join([
+                            f"HTTP/1.1 200 OK",
+                            ""
+                            "Content-Type: text/plain",
+                            f"Content-Length: {contentLength}",
+                            "",
+                            user_agent
+                        ])
+                        return resp
+                    elif head == "files":
+                        filePath = "/".join(path.split("/")[:2])
+                        if os.path.isfile(filePath):
+                            with open(filePath) as f:
+                                fileData = f.read()
+                            return "\r\n".join([
+                                f"HTTP/1.1 200 OK",
+                                ""
+                                "Content-Type: application/octet-stream",
+                                f"Content-Length: {len(fileData)}",
+                                "",
+                                fileData
+                            ])
+                        else:
+                            return "\r\n".join([
+                                f"HTTP/1.1 404 Not Found",
+                                ""
+                                "Content-Type: application/octet-stream"
+                            ])
+
+
                     
             resp_code = "200 OK" if path == "/" else "404 Not Found"
             resp = "\r\n".join([
