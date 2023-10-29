@@ -33,13 +33,15 @@ def main():
                         ])
                         return resp
                 if path.split("/")[1].strip() == "user-agent":
+                    user_agent = data.split("\n")[3].split(":")[1]
+                    contentLength = len(user_agent)
                     resp = "\r\n".join([
                         f"HTTP/1.1 200 OK",
                         ""
                         "Content-Type: text/plain",
-                        f"Content-Length: 11",
+                        f"Content-Length: {contentLength}",
                         "",
-                        "curl/7.64.1"
+                        user_agent
                     ])
                     return resp
                     
