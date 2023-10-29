@@ -14,8 +14,9 @@ def main():
     with conn:
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
-        print(data)
+        # print(data)
         path = data.split("\n")[0].split()[1]
+        print(path)
 
         def getResp():
             if "/" in path:
