@@ -23,7 +23,7 @@ def main():
                 head = path.split("/")[1].strip()
                 if head == "echo":
                     echo  = True
-                    rngStr = path.split("/")[2].strip()
+                    rngStr = "/".join(path.split("/")[2:])
 
         resp_code = "200 OK" if (path == "/" or echo) else "404 Not Found"
         contentLength = 0
