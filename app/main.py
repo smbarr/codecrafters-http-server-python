@@ -15,9 +15,21 @@ def main():
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
         path = data.split("\n")[0].split()[1]
+        page = path.split("/")[-1].strip()
 
-        resp_code = "200 OK" if path == "/" else "404 Not Found"
-        resp = f"HTTP/1.1 {resp_code}\r\n\r\n"
+        # resp_code = "200 OK" if path == "/" else "404 Not Found"
+        resp_code = "200 OK"
+        contentLength = len(page)
+
+        resp = "\r\n".join([
+            f"HTTP/1.1 {resp_code}",
+            "Content-Type: text/plain",
+            f"Content-Length: {contentLength}",
+            "",
+            page
+        ])
+        print(resp)
+
         conn.sendall(resp.encode('utf-8'))
 
 
