@@ -16,29 +16,44 @@ def main():
         data = _bytes.decode("utf-8")
         path = data.split("\n")[0].split()[1]
 
-        echo = False
-        rngStr = ""
-        if "/" in path:
-            if len(path.split("/")) > 1:
-                head = path.split("/")[1].strip()
-                if head == "echo":
-                    echo  = True
-                    rngStr = "/".join(path.split("/")[2:])
+        def getResp():
+            if "/" in path:
+                if len(path.split("/")) > 1:
+                    head = path.split("/")[1].strip()
+                    if head == "echo":
+                        rngStr = "/".join(path.split("/")[2:])
+                        contentLength = len(rngStr)
+                        resp = "\r\n".join([
+                            f"HTTP/1.1 200 OK",
+                            ""
+                            "Content-Type: text/plain",
+                            f"Content-Length: {contentLength}",
+                            "",
+                            rngStr
+                        ])
+                        return resp
+                if path.split("/")[1].strip() == "user-agent":
+                    resp = "\r\n".join([
+                        f"HTTP/1.1 200 OK",
+                        ""
+                        "Content-Type: text/plain",
+                        f"Content-Length: 11",
+                        "",
+                        "curl/7.64.1"
+                    ])
+                    return resp
+                    
+            resp_code = "200 OK" if path == "/" else "404 Not Found"
+            resp = "\r\n".join([
+                f"HTTP/1.1 {resp_code}",
+                ""
+                "Content-Type: text/plain",
+                "", ""
+            ])
+                    
+            return resp
 
-        resp_code = "200 OK" if (path == "/" or echo) else "404 Not Found"
-        contentLength = 0
-        if echo:
-            contentLength = len(rngStr)
-
-        resp = "\r\n".join([
-            f"HTTP/1.1 {resp_code}",
-            "Content-Type: text/plain",
-            f"Content-Length: {contentLength}",
-            "",
-            rngStr
-        ])
-        print(resp)
-
+        resp = getResp()
         conn.sendall(resp.encode('utf-8'))
 
 
