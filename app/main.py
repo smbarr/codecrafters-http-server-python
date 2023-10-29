@@ -37,8 +37,9 @@ def main():
                     user_agent = None
                     for n in dataLines:
                         if "User-Agent" in dataLines[n]:
-                            user_agent = dataLines[n].split(":")[1]
+                            user_agent = dataLines[n].split(":")[1].strip()
                     contentLength = len(user_agent)
+                    print(user_agent)
                     resp = "\r\n".join([
                         f"HTTP/1.1 200 OK",
                         ""
