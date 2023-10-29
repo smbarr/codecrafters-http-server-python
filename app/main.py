@@ -46,7 +46,7 @@ def handle_client(conn):
                         if os.path.isfile(filePath):
                             with open(filePath) as f:
                                 fileData = f.read()
-                            return "\r\n".join([
+                            resp = "\r\n".join([
                                 f"HTTP/1.1 200 OK",
                                 ""
                                 "Content-Type: application/octet-stream",
@@ -54,12 +54,15 @@ def handle_client(conn):
                                 "",
                                 fileData
                             ])
+                            print(resp)
                         else:
-                            return "\r\n".join([
+                            resp = "\r\n".join([
                                 f"HTTP/1.1 404 Not Found",
                                 ""
                                 "Content-Type: application/octet-stream"
                             ])
+                            print(resp)
+                        return resp
 
 
                     
