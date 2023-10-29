@@ -18,7 +18,7 @@ def handle_client(conn):
                         contentLength = len(rngStr)
                         resp = "\r\n".join([
                             f"HTTP/1.1 200 OK",
-                            ""
+                            "",
                             "Content-Type: text/plain",
                             f"Content-Length: {contentLength}",
                             "",
@@ -33,7 +33,7 @@ def handle_client(conn):
                         contentLength = len(user_agent)
                         resp = "\r\n".join([
                             f"HTTP/1.1 200 OK",
-                            ""
+                            "",
                             "Content-Type: text/plain",
                             f"Content-Length: {contentLength}",
                             "",
@@ -48,7 +48,7 @@ def handle_client(conn):
                                 fileData = f.read()
                             resp = "\r\n".join([
                                 f"HTTP/1.1 200 OK",
-                                ""
+                                "",
                                 "Content-Type: application/octet-stream",
                                 f"Content-Length: {len(fileData)}",
                                 "",
@@ -58,8 +58,9 @@ def handle_client(conn):
                         else:
                             resp = "\r\n".join([
                                 f"HTTP/1.1 404 Not Found",
-                                ""
-                                "Content-Type: text/plain"
+                                "",
+                                "Content-Type: text/plain",
+                                "Content-Length: 0",
                                 "", ""
                             ])
                             print(resp)
@@ -70,7 +71,7 @@ def handle_client(conn):
             resp_code = "200 OK" if path == "/" else "404 Not Found"
             resp = "\r\n".join([
                 f"HTTP/1.1 {resp_code}",
-                ""
+                "",
                 "Content-Type: text/plain",
                 "", ""
             ])
