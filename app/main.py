@@ -5,7 +5,7 @@ import socket
 import threading
 
 def handle_client(conn, directory):
-        _bytes = conn.recv(144)
+        _bytes = conn.recv(1024)
         data = _bytes.decode("utf-8")
         dataLines = data.split("\r\n")
         method = dataLines[0].split()[0].strip()
