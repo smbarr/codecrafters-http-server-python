@@ -35,7 +35,7 @@ def main():
                 if path.split("/")[1].strip() == "user-agent":
                     dataLines = data.split("\n")
                     user_agent = None
-                    for n in dataLines
+                    for n in dataLines:
                         if "User-Agent" in dataLines[n]:
                             user_agent = dataLines[n].split(":")[1]
                     contentLength = len(user_agent)
