@@ -1,13 +1,15 @@
 # Uncomment this to pass the first stage
 import os
+import sys
 import socket
 import threading
 
-def handle_client(conn):
+def handle_client(conn, directory):
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
         dataLines = data.split("\n")
-        path = dataLines[0].split()[1]
+        method = dataLines[0].split()[0].strip()
+        path = dataLines[0].split()[1].strip()
 
         def getResp():
             if "/" in path:
@@ -39,30 +41,30 @@ def handle_client(conn):
                         ])
                         return resp
                     elif head == "files":
-                        directory = "/tmp/data/codecrafters.io/http-server-tester/"
                         fileName = directory+path.split("/")[2]
-                        if os.path.isfile(fileName):
-                            with open(fileName) as f:
-                                fileData = f.read()
-                            resp = "\r\n".join([
-                                f"HTTP/1.1 200 OK",
-                                "Content-Type: application/octet-stream",
-                                f"Content-Length: {len(fileData)}",
-                                "",
-                                fileData
-                            ])
-                            print(resp)
-                        else:
-                            resp = "\r\n".join([
-                                f"HTTP/1.1 404 Not Found",
-                                "Content-Type: text/plain",
-                                "Content-Length: 0",
-                                "", ""
-                            ])
-                            print(resp)
-                        return resp
-
-
+                        if method == "GET":
+                            if os.path.isfile(fileName):
+                                with open(fileName) as f:
+                                    fileData = f.read()
+                                resp = "\r\n".join([
+                                    f"HTTP/1.1 200 OK",
+                                    "Content-Type: application/octet-stream",
+                                    f"Content-Length: {len(fileData)}",
+                                    "",
+                                    fileData
+                                ])
+                                print(resp)
+                            else:
+                                resp = "\r\n".join([
+                                    f"HTTP/1.1 404 Not Found",
+                                    "Content-Type: text/plain",
+                                    "Content-Length: 0",
+                                    "", ""
+                                ])
+                                print(resp)
+                            return resp
+                        elif method == "POST":
+                            print(data)
                     
             resp_code = "200 OK" if path == "/" else "404 Not Found"
             resp = "\r\n".join([
@@ -81,13 +83,19 @@ def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!")
 
+    directory = None
+    if len(sys.argv) > 0:
+        for n in range(len(sys.argv)):
+            if sys.argv[n] == "--directory":
+                directory = sys.argv[n+1]
+
     # Uncomment this to pass the first stage
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
 
     while True:
         conn, addr = server_socket.accept() # wait for client
-        client_thread = threading.Thread(target=handle_client, args=(conn,))
+        client_thread = threading.Thread(target=handle_client, args=(conn,directory,))
         client_thread.start()
 
 
