@@ -7,7 +7,7 @@ import threading
 def handle_client(conn, directory):
         _bytes = conn.recv(144)
         data = _bytes.decode("utf-8")
-        dataLines = data.split("\n")
+        dataLines = data.split("\r\n")
         method = dataLines[0].split()[0].strip()
         path = dataLines[0].split()[1].strip()
 
