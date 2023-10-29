@@ -64,7 +64,16 @@ def handle_client(conn, directory):
                                 print(resp)
                             return resp
                         elif method == "POST":
-                            print(data)
+                            body = dataLines[-1]
+                            with open(fileName, 'w') as f:
+                                f.write(body)
+                            resp = "\r\n".join([
+                                f"HTTP/1.1 201",
+                                "Content-Type: text/plain",
+                                "Content-Length: 0",
+                                "", ""
+                            ])    
+                            return resp
                     
             resp_code = "200 OK" if path == "/" else "404 Not Found"
             resp = "\r\n".join([
