@@ -39,10 +39,10 @@ def handle_client(conn):
                         ])
                         return resp
                     elif head == "files":
-                        filePath = "/".join(path.split("/")[2:])
-                        print(filePath)
-                        if os.path.isfile(filePath):
-                            with open(filePath) as f:
+                        directory = "/tmp/data/codecrafters.io/http-server-tester/"
+                        fileName = directory+path.split("/")[2]
+                        if os.path.isfile(fileName):
+                            with open(fileName) as f:
                                 fileData = f.read()
                             resp = "\r\n".join([
                                 f"HTTP/1.1 200 OK",
